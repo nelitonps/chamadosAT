@@ -1,6 +1,5 @@
 package com.nelitonps.chamadosAT.domain;
 
-import aj.org.objectweb.asm.commons.SerialVersionUIDAdder;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.nelitonps.chamadosAT.domain.enums.Perfil;
 import jakarta.persistence.*;

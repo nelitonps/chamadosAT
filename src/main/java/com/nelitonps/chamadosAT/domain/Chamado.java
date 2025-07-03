@@ -3,10 +3,7 @@ package com.nelitonps.chamadosAT.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.nelitonps.chamadosAT.domain.enums.Prioridade;
 import com.nelitonps.chamadosAT.domain.enums.Status;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -17,6 +14,7 @@ public class Chamado implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataAbertura = LocalDate.now();
