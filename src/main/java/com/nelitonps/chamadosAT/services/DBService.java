@@ -10,6 +10,7 @@ import com.nelitonps.chamadosAT.repositories.ChamadoRepository;
 import com.nelitonps.chamadosAT.repositories.ClienteRepository;
 import com.nelitonps.chamadosAT.repositories.TecnicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -23,12 +24,14 @@ public class DBService {
     private ClienteRepository clienteRepository;
     @Autowired
     private ChamadoRepository chamadoRepository;
+    @Autowired //parte de Autenticação
+    private BCryptPasswordEncoder encoder;
 
     public void instanciaDB(){
 
-        Tecnico tec1 = new Tecnico(null, "Flavia Silva", "376.720.710-92", "flavia@mail.com", "123");
+        Tecnico tec1 = new Tecnico(null, "Flavia Silva", "376.720.710-92", "flavia@mail.com", encoder.encode("123"));
         tec1.addPerfil(Perfil.ADMIN);
-        Cliente cli1 = new Cliente(null, "Silvio Gomes", "172.117.670-57", "silvio@mail.com", "123");
+        Cliente cli1 = new Cliente(null, "Silvio Gomes", "172.117.670-57", "silvio@mail.com", encoder.encode("123"));
         Chamado chamado1 = new Chamado(null, Prioridade.BAIXA, Status.ABERTO, "Chamado 1", "Primeiro chamado", cli1, tec1);
 
         tecnicoRepository.saveAll(Arrays.asList(tec1));

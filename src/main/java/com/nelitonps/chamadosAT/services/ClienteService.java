@@ -9,6 +9,7 @@ import com.nelitonps.chamadosAT.repositories.PessoaRepository;
 import com.nelitonps.chamadosAT.services.exception.DataIntegrityViolationException;
 import com.nelitonps.chamadosAT.services.exception.ObjectnotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,8 @@ public class ClienteService {
     private ClienteRepository clienteRepository;
     @Autowired
     private PessoaRepository pessoaRepository;
+    @Autowired
+    private BCryptPasswordEncoder encoder;
 
     public Cliente findById(Integer id) {
         Optional<Cliente> obj = clienteRepository.findById(id);
@@ -33,6 +36,7 @@ public class ClienteService {
 
     public Cliente create(ClienteDTO objDTO) {
         objDTO.setId(null);
+        objDTO.setSenha(encoder.encode(objDTO.getSenha())); //Parte de autenticação
         Cliente obj = new Cliente(objDTO);
         validaPorCpfEEmail(objDTO);
         return clienteRepository.save(obj);
@@ -40,6 +44,7 @@ public class ClienteService {
 
     public Cliente update(Integer id, ClienteDTO objDTO) {
         objDTO.setId(id);
+
         Cliente oldObj = findById(id);
         validaPorCpfEEmail(objDTO);
         oldObj = new Cliente(objDTO);
