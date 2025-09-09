@@ -17,7 +17,7 @@ public class DevConfig {
     @Value("${spring.jpa.hibernate.ddl-auto}")
     private String value;
 
-    @PostConstruct
+    //@PostConstruct       - Desativado instancia
     public boolean instanciaDB(){
         if (value.equals("create")){
             this.dbService.instanciaDB();

@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: commonHead('Metoxi | Dashboard')"></head>
+
+<body>
+
+<!--Alert-->
+<div id="alert-container" class="position-fixed top-0 end-0 p-3" style="z-index: 1050;"></div>
+
+<!--start header-->
+<div th:replace="fragments/header/top-header :: mainHeader"></div>
+<!--end top header-->
+
+<!--start sidebar-->
+<div th:replace="fragments/sidebar/sidebar :: mainSidebar"></div>
+<!--end sidebar-->
+
+  <!--start main wrapper-->
+  <main class="main-wrapper">
+    <div class="main-content">
+      <!--breadcrumb-->
+				<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+					<div class="breadcrumb-title pe-3">Helpdesk</div>
+					<div class="ps-3">
+						<nav aria-label="breadcrumb">
+							<ol class="breadcrumb mb-0 p-0">
+								<li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+								</li>
+								<li class="breadcrumb-item active" aria-current="page">Home</li>
+							</ol>
+						</nav>
+					</div>
+					<div class="ms-auto">
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary">Settings</button>
+							<button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">	<span class="visually-hidden">Toggle Dropdown</span>
+							</button>
+							<div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">	<a class="dropdown-item" href="javascript:;">Action</a>
+								<a class="dropdown-item" href="javascript:;">Another action</a>
+								<a class="dropdown-item" href="javascript:;">Something else here</a>
+								<div class="dropdown-divider"></div>	<a class="dropdown-item" href="javascript:;">Separated link</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--end breadcrumb-->
+
+        <div class="card" style="margin-left: 10%; margin-right: 10%;">
+          <div class="card-body" style="padding: 0;">
+            <div class="card-body p-4">
+								<h4 class="mb-4">Editar Cliente</h4>
+								<form class="row g-3" id="form-cliente" th:action="@{'/chamados/clientes/editar-cliente/' + ${cliente.id}}" th:object="${cliente}" method="post">
+
+                                  <!-- Campo oculto com o ID do cliente -->
+                                  <input type="hidden" id="cliente-id" th:value="${cliente.id}">
+
+                                    <div class="col-md-12">
+                                        <label for="nome" class="form-label">Nome</label>
+                                        <input type="text" th:field="*{nome}" class="form-control" id="nome" placeholder="Escreva o nome..." required>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <label for="cpf" class="form-label">CPF</label>
+                                        <input type="text" th:field="*{cpf}" class="form-control" id="cpf" placeholder="Cpf..." required>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" th:field="*{email}" class="form-control" id="email" autocomplete="off" placeholder="E-mail..." required>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <label for="senha" class="form-label">Senha</label>
+                                      <input type="password" th:field="*{senha}" class="form-control" id="senha" autocomplete="new-password" placeholder="Nova senha (opcional)">
+
+                                    </div>
+
+
+                                  <div class="col-md-6">
+                                    <label class="form-label">Perfis Selecionados</label>
+                                    <div id="perfis-selecionados" class="mb-2"></div>
+
+                                    <label for="perfil" class="form-label">Perfil</label>
+                                    <select name="perfil" id="perfil" class="form-select" style="overflow-y: hidden;" multiple required>
+                                      <option value="" disabled>Selecione...</option>
+                                      <option th:each="perfil : ${perfilList}"
+                                              th:value="${perfil.codigo}"
+                                              th:text="${perfil.descricao}"
+                                              th:selected="${cliente.perfis.contains(perfil)}">
+                                      </option>
+                                    </select>
+                                  </div>
+
+
+
+
+                                  <div class="col-md-12">
+										<div class="d-md-flex d-grid align-items-center gap-3">
+											<button type="submit" class="btn btn-primary px-4">Salvar</button>
+                                            <a th:href="@{/chamados/clientes}" class="btn btn-light px-4">Cancelar</a>
+										</div>
+									</div>
+								</form>
+							</div>
+          </div>
+        </div>
+
+    </div>
+  </main>
+  <!--end main wrapper-->
+
+  <!--start overlay-->
+  <div class="overlay btn-toggle"></div>
+  <!--end overlay-->
+
+     <!--start footer-->
+     <footer class="page-footer">
+      <p class="mb-0">Copyright © 2024. All right reserved.</p>
+    </footer>
+    <!--top footer-->
+
+  <!--start cart-->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart">
+    <div class="offcanvas-header border-bottom h-70 justify-content-between">
+      <h5 class="mb-0" id="offcanvasRightLabel">8 New Orders</h5>
+      <a href="javascript:;" class="primaery-menu-close" data-bs-dismiss="offcanvas">
+        <i class="material-icons-outlined">close</i>
+      </a>
+    </div>
+    <div class="offcanvas-body p-0">
+      <div class="order-list">
+        <div class="order-item d-flex align-items-center gap-3 p-3 border-bottom">
+          <div class="order-img">
+            <img th:src="@{/assets/images/orders/01.png}" class="img-fluid rounded-3" width="75" alt="">
+          </div>
+          <div class="order-info flex-grow-1">
+            <h5 class="mb-1 order-title">White Men Shoes</h5>
+            <p class="mb-0 order-price">$289</p>
+          </div>
+          <div class="d-flex">
+            <a class="order-delete"><span class="material-icons-outlined">delete</span></a>
+            <a class="order-delete"><span class="material-icons-outlined">visibility</span></a>
+          </div>
+        </div>
+
+        <div class="order-item d-flex align-items-center gap-3 p-3 border-bottom">
+          <div class="order-img">
+            <img th:src="@{/assets/images/orders/02.png}" class="img-fluid rounded-3" width="75" alt="">
+          </div>
+          <div class="order-info flex-grow-1">
+            <h5 class="mb-1 order-title">Red Airpods</h5>
+            <p class="mb-0 order-price">$149</p>
+          </div>
+          <div class="d-flex">
+            <a class="order-delete"><span class="material-icons-outlined">delete</span></a>
+            <a class="order-delete"><span class="material-icons-outlined">visibility</span></a>
+          </div>
+        </div>
+
+        <div class="order-item d-flex align-items-center gap-3 p-3 border-bottom">
+          <div class="order-img">
+            <img th:src="@{/assets/images/orders/03.png}" class="img-fluid rounded-3" width="75" alt="">
+          </div>
+          <div class="order-info flex-grow-1">
+            <h5 class="mb-1 order-title">Men Polo Tshirt</h5>
+            <p class="mb-0 order-price">$139</p>
+          </div>
+          <div class="d-flex">
+            <a class="order-delete"><span class="material-icons-outlined">delete</span></a>
+            <a class="order-delete"><span class="material-icons-outlined">visibility</span></a>
+          </div>
+        </div>
+
+        <div class="order-item d-flex align-items-center gap-3 p-3 border-bottom">
+          <div class="order-img">
+            <img th:src="@{/assets/images/orders/04.png}" class="img-fluid rounded-3" width="75" alt="">
+          </div>
+          <div class="order-info flex-grow-1">
+            <h5 class="mb-1 order-title">Blue Jeans Casual</h5>
+            <p class="mb-0 order-price">$485</p>
+          </div>
+          <div class="d-flex">
+            <a class="order-delete"><span class="material-icons-outlined">delete</span></a>
+            <a class="order-delete"><span class="material-icons-outlined">visibility</span></a>
+          </div>
+        </div>
+
+        <div class="order-item d-flex align-items-center gap-3 p-3 border-bottom">
+          <div class="order-img">
+            <img th:src="@{/assets/images/orders/05.png}" class="img-fluid rounded-3" width="75" alt="">
+          </div>
+          <div class="order-info flex-grow-1">
+            <h5 class="mb-1 order-title">Fancy Shirts</h5>
+            <p class="mb-0 order-price">$758</p>
+          </div>
+          <div class="d-flex">
+            <a class="order-delete"><span class="material-icons-outlined">delete</span></a>
+            <a class="order-delete"><span class="material-icons-outlined">visibility</span></a>
+          </div>
+        </div>
+
+        <div class="order-item d-flex align-items-center gap-3 p-3 border-bottom">
+          <div class="order-img">
+            <img th:src="@{/assets/images/orders/06.png}" class="img-fluid rounded-3" width="75" alt="">
+          </div>
+          <div class="order-info flex-grow-1">
+            <h5 class="mb-1 order-title">Home Sofa Set </h5>
+            <p class="mb-0 order-price">$546</p>
+          </div>
+          <div class="d-flex">
+            <a class="order-delete"><span class="material-icons-outlined">delete</span></a>
+            <a class="order-delete"><span class="material-icons-outlined">visibility</span></a>
+          </div>
+        </div>
+
+        <div class="order-item d-flex align-items-center gap-3 p-3 border-bottom">
+          <div class="order-img">
+            <img th:src="@{/assets/images/orders/07.png}" class="img-fluid rounded-3" width="75" alt="">
+          </div>
+          <div class="order-info flex-grow-1">
+            <h5 class="mb-1 order-title">Black iPhone</h5>
+            <p class="mb-0 order-price">$1049</p>
+          </div>
+          <div class="d-flex">
+            <a class="order-delete"><span class="material-icons-outlined">delete</span></a>
+            <a class="order-delete"><span class="material-icons-outlined">visibility</span></a>
+          </div>
+        </div>
+
+        <div class="order-item d-flex align-items-center gap-3 p-3 border-bottom">
+          <div class="order-img">
+            <img th:src="@{/assets/images/orders/08.png}" class="img-fluid rounded-3" width="75" alt="">
+          </div>
+          <div class="order-info flex-grow-1">
+            <h5 class="mb-1 order-title">Goldan Watch</h5>
+            <p class="mb-0 order-price">$689</p>
+          </div>
+          <div class="d-flex">
+            <a class="order-delete"><span class="material-icons-outlined">delete</span></a>
+            <a class="order-delete"><span class="material-icons-outlined">visibility</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="offcanvas-footer h-70 p-3 border-top">
+      <div class="d-grid">
+        <button type="button" class="btn btn-dark" data-bs-dismiss="offcanvas">View Products</button>
+      </div>
+    </div>
+  </div>
+  <!--end cart-->
+
+
+  <!--start switcher-->
+  <button class="btn btn-primary position-fixed bottom-0 end-0 m-3 d-flex align-items-center gap-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop">
+    <i class="material-icons-outlined">tune</i>Customize
+  </button>
+  
+  <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="staticBackdrop">
+    <div class="offcanvas-header border-bottom h-70 justify-content-between">
+      <div class="">
+        <h5 class="mb-0">Theme Customizer</h5>
+        <p class="mb-0">Customize your theme</p>
+      </div>
+      <a href="javascript:;" class="primaery-menu-close" data-bs-dismiss="offcanvas">
+        <i class="material-icons-outlined">close</i>
+      </a>
+    </div>
+    <div class="offcanvas-body">
+      <div>
+        <p>Theme variation</p>
+
+        <div class="row g-3">
+          <div class="col-12 col-xl-6">
+            <input type="radio" class="btn-check" name="theme-options" id="LightTheme" checked>
+            <label class="btn btn-outline-secondary d-flex flex-column gap-1 align-items-center justify-content-center p-4" for="LightTheme">
+              <span class="material-icons-outlined">light_mode</span>
+              <span>Light</span>
+            </label>
+          </div>
+          <div class="col-12 col-xl-6">
+            <input type="radio" class="btn-check" name="theme-options" id="DarkTheme">
+            <label class="btn btn-outline-secondary d-flex flex-column gap-1 align-items-center justify-content-center p-4" for="DarkTheme">
+              <span class="material-icons-outlined">dark_mode</span>
+              <span>Dark</span>
+            </label>
+          </div>
+          <div class="col-12 col-xl-6">
+            <input type="radio" class="btn-check" name="theme-options" id="SemiDarkTheme">
+            <label class="btn btn-outline-secondary d-flex flex-column gap-1 align-items-center justify-content-center p-4" for="SemiDarkTheme">
+              <span class="material-icons-outlined">contrast</span>
+              <span>Semi Dark</span>
+            </label>
+          </div>
+          <div class="col-12 col-xl-6">
+            <input type="radio" class="btn-check" name="theme-options" id="BoderedTheme">
+            <label class="btn btn-outline-secondary d-flex flex-column gap-1 align-items-center justify-content-center p-4" for="BoderedTheme">
+              <span class="material-icons-outlined">border_style</span>
+              <span>Bordered</span>
+            </label>
+          </div>
+        </div><!--end row-->
+
+      </div>
+    </div>
+  </div>
+  <!--start switcher-->
+
+  <!--Scripts-->
+  <div th:replace="fragments/scripts :: commonScripts"></div>
+
+<script>
+  function mostrarAlerta(tipo, titulo, mensagem, duracao = 5000, tempoBarra = 3000) {
+    const container = document.getElementById('alert-container');
+
+    const alerta = document.createElement('div');
+    alerta.className = `alert alert-${tipo} border-0 bg-${tipo} alert-dismissible fade show position-relative mb-2`;
+    alerta.style.paddingBottom = '1.5rem';
+
+    const corBarra = tipo === 'success' ? '#b2f2bb' : '#f5c2c7';
+
+    alerta.innerHTML = `
+      <div class="d-flex align-items-center">
+        <div class="font-35 text-white">
+          <span class="material-icons-outlined fs-2">
+            ${tipo === 'success' ? 'check_circle' : 'error'}
+          </span>
+        </div>
+        <div class="ms-3 flex-grow-1">
+          <h6 class="mb-0 text-white">${titulo}</h6>
+          <div class="text-white">${mensagem}</div>
+        </div>
+      </div>
+      <button type="button" class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="alert" aria-label="Close"></button>
+      <div class="position-absolute bottom-0 start-0 w-100">
+        <div class="progress" style="height: 5px;">
+          <div class="progress-bar" role="progressbar" style="width: 0%; background-color: ${corBarra};" id="barra-temporizador"></div>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(alerta);
+
+    // Anima a barra de progresso com tempo reduzido
+    const barra = alerta.querySelector('#barra-temporizador');
+    barra.style.transition = `width ${tempoBarra}ms linear`;
+    setTimeout(() => {
+      barra.style.width = '100%';
+    }, 50);
+
+    // Remove alerta após o tempo total
+    setTimeout(() => {
+      alerta.classList.remove('show');
+      alerta.classList.add('hide');
+      setTimeout(() => alerta.remove(), 500);
+    }, duracao);
+  }
+</script>
+
+<script>
+  let dadosOriginais = {};
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('form-cliente');
+    const formData = new FormData(form);
+
+    dadosOriginais = {
+      nome: formData.get('nome'),
+      cpf: formData.get('cpf'),
+      email: formData.get('email'),
+      senha: '', // senha não vem preenchida por segurança
+      perfis: Array.from(document.getElementById('perfil').selectedOptions).map(opt => opt.value)
+    };
+  });
+
+  document.getElementById('form-cliente').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const token = localStorage.getItem('token');
+    const formData = new FormData(this);
+    const id = document.getElementById('cliente-id')?.value || null;
+
+    const perfisSelecionados = Array.from(document.getElementById('perfil').selectedOptions)
+                                    .map(opt => opt.value);
+
+    const dadosAtuais = {
+      nome: formData.get('nome'),
+      cpf: formData.get('cpf'),
+      email: formData.get('email'),
+      senha: formData.get('senha'),
+      perfis: perfisSelecionados
+    };
+
+    // Verifica se houve alteração
+    const houveAlteracao = Object.keys(dadosOriginais).some(key => {
+      if (key === 'perfis') {
+        return JSON.stringify(dadosOriginais.perfis.sort()) !== JSON.stringify(dadosAtuais.perfis.sort());
+      }
+      return dadosOriginais[key] !== dadosAtuais[key];
+    });
+
+    if (!houveAlteracao) {
+      alert('Nenhuma alteração detectada.');
+      return;
+    }
+
+    // Monta objeto técnico
+    const cliente = {
+      id: id,
+      nome: dadosAtuais.nome,
+      cpf: dadosAtuais.cpf,
+      email: dadosAtuais.email,
+      senha: dadosAtuais.senha,
+      perfis: dadosAtuais.perfis.map(p => parseInt(p))
+    };
+
+    const metodo = id ? 'PUT' : 'POST';
+    const url = id ? `/clientes/${id}` : '/clientes';
+
+    fetch(url, {
+      method: metodo,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify(cliente)
+    })
+    .then(response => {
+    if (response.ok) {
+      mostrarAlerta('success', 'Atualização realizada', 'Cliente atualizado com sucesso!', 5000);
+       // Aguarda 3 segundos antes de redirecionar
+    setTimeout(() => {
+      window.location.href = '/chamados/clientes';
+    }, 3000);
+    } else {
+      mostrarAlerta('danger', 'Erro', 'Não foi possível atualizar o cliente.', 5000);
+    }
+    });
+  });
+</script>
+
+
+<script>
+  const selectPerfil = document.getElementById('perfil');
+  const containerPerfis = document.getElementById('perfis-selecionados');
+
+  function atualizarBadges() {
+    containerPerfis.innerHTML = '';
+
+    Array.from(selectPerfil.selectedOptions).forEach(option => {
+      const badge = document.createElement('span');
+      badge.className = 'badge bg-primary me-1 mb-1 d-inline-flex align-items-center';
+      badge.textContent = option.text;
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'btn-close btn-close-white ms-2';
+      btn.setAttribute('aria-label', 'Remover');
+      btn.onclick = () => {
+        option.selected = false;
+        atualizarBadges();
+      };
+
+      badge.appendChild(btn);
+      containerPerfis.appendChild(badge);
+    });
+  }
+
+  // Inicializa os badges ao carregar a página
+  document.addEventListener('DOMContentLoaded', atualizarBadges);
+
+  // Atualiza os badges ao mudar seleção
+  selectPerfil.addEventListener('mousedown', function(e) {
+    e.preventDefault();
+    const option = e.target;
+    if (option.tagName === 'OPTION') {
+      option.selected = !option.selected;
+      atualizarBadges();
+    }
+  });
+</script>
+
+
+<script>
+  const cpfInput = document.getElementById('cpf');
+
+  cpfInput.addEventListener('input', function () {
+    let value = cpfInput.value.replace(/\D/g, '');
+
+    if (value.length > 11) value = value.slice(0, 11);
+
+    value = value.replace(/(\d{3})(\d)/, '$1.$2');
+    value = value.replace(/(\d{3})(\d)/, '$1.$2');
+    value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+
+    cpfInput.value = value;
+  });
+</script>
+
+</body>
+</html>

@@ -5,6 +5,7 @@ import com.nelitonps.chamadosAT.security.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -55,10 +56,26 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors(cors -> cors.and())
-                .csrf(csrf -> csrf.disable())
+                .csrf().disable() // 🔴 Desativa CSRF
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/chamados/login", "/chamados/dashboard").permitAll()
+                        .requestMatchers("/chamados/login", "/chamados/dashboard").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/chamados").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/chamados/novo-chamado").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/chamados/novo-tecnico").permitAll()
+                        .requestMatchers("/login", "/auth/**").permitAll()
+                        .requestMatchers(
+                                "/h2-console/**",
+                                "/chamados/**",
+                                "/novo-tecnico/**",
+                                "/assets/**",
+                                "/css/**", "/js/**", "/img/**", "/fonts/**"
+                        ).permitAll()
+                        .requestMatchers(HttpMethod.GET, "/chamados").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/chamados").authenticated()
+                        .requestMatchers("/api/**").authenticated() // protege os dados da API
+                        .requestMatchers(HttpMethod.POST, "/chamados").hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated()
                 )
                 .addFilter(new JWTAuthenticationFilter(authenticationManager(http), jwtUtil))

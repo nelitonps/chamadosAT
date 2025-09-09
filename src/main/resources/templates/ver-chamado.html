@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: commonHead('Metoxi | Dashboard')"></head>
+
+<body>
+
+<!--Alert-->
+<div id="alert-container" class="position-fixed top-0 end-0 p-3" style="z-index: 1050;"></div>
+
+<!--start header-->
+<div th:replace="fragments/header/top-header :: mainHeader"></div>
+<!--end top header-->
+
+<!--start sidebar-->
+<div th:replace="fragments/sidebar/sidebar :: mainSidebar"></div>
+<!--end sidebar-->
+
+  <!--start main wrapper-->
+  <main class="main-wrapper">
+    <div class="main-content">
+      <!--breadcrumb-->
+				<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+					<div class="breadcrumb-title pe-3">Helpdesk</div>
+					<div class="ps-3">
+						<nav aria-label="breadcrumb">
+							<ol class="breadcrumb mb-0 p-0">
+								<li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+								</li>
+								<li class="breadcrumb-item active" aria-current="page">Home</li>
+							</ol>
+						</nav>
+					</div>
+					<div class="ms-auto">
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary">Settings</button>
+							<button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">	<span class="visually-hidden">Toggle Dropdown</span>
+							</button>
+							<div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">	<a class="dropdown-item" href="javascript:;">Action</a>
+								<a class="dropdown-item" href="javascript:;">Another action</a>
+								<a class="dropdown-item" href="javascript:;">Something else here</a>
+								<div class="dropdown-divider"></div>	<a class="dropdown-item" href="javascript:;">Separated link</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--end breadcrumb-->
+
+      <div class="card" style="margin-left: 10%; margin-right: 10%;">
+        <div class="card-body" style="padding: 0;">
+          <div class="card-body p-4">
+
+            <h4 class="mb-4">Ver Chamado</h4>
+            <form class="row g-3" id="form-chamado">
+              <input type="hidden" id="chamado-id" name="id" th:value="${chamado.id}">
+
+              <div class="col-md-12">
+                <label for="input1" class="form-label">Titulo do Chamado</label>
+                <input type="text" name="titulo" class="form-control" id="input1" th:value="${chamado.titulo}" placeholder="Escreva o titulo..." disabled>
+              </div>
+
+              <div class="col-md-6">
+                <label for="input7" class="form-label">Status</label>
+                <select name="status" id="input7" class="form-select" disabled>
+                  <option value="">Selecione...</option>
+                  <option th:each="status : ${statusList}" th:value="${status.codigo}" th:text="${status.descricao}" th:selected="${status.codigo == chamado.status}"></option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="input8" class="form-label">Prioridade</label>
+                <select name="prioridade" id="input8" class="form-select" disabled>
+                  <option value="">Selecione...</option>
+                  <option th:each="prioridade : ${prioridadeList}" th:value="${prioridade.codigo}" th:text="${prioridade.descricao}" th:selected="${prioridade.codigo == chamado.prioridade}"></option>
+                </select>
+              </div>
+
+              <div class="col-md-12">
+                <label for="input9" class="form-label">Tecnico</label>
+                <select name="tecnicoId" id="input9" class="form-select" disabled>
+                  <option value="">Selecione...</option>
+                  <option th:each="tecnico : ${tecnicos}" th:value="${tecnico.id}" th:text="${tecnico.nome}" th:selected="${tecnico.id == chamado.tecnico}"></option>
+                </select>
+              </div>
+              <div class="col-md-12">
+                <label for="input10" class="form-label">Cliente</label>
+                <select name="clienteId" id="input10" class="form-select" disabled>
+                  <option value="">Selecione...</option>
+                  <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nome}" th:selected="${cliente.id == chamado.cliente}"></option>
+                </select>
+              </div>
+
+              <div class="mb-4">
+                <label for="input1" class="form-label">Descrição</label>
+                <textarea name="observacoes" id="descricao" class="form-control" cols="4" rows="6" th:text="${chamado.observacoes}" placeholder="Escreva a descrição..." style="height: 121px;" disabled></textarea>
+              </div>
+
+              <div class="col-md-12">
+                <div class="d-md-flex d-grid align-items-center gap-3">
+                  <a th:href="@{/chamados/helpdesk}" class="btn btn-light px-4">Voltar</a>
+                </div>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+
+
+
+    </div>
+  </main>
+  <!--end main wrapper-->
+
+  <!--start overlay-->
+  <div class="overlay btn-toggle"></div>
+  <!--end overlay-->
+
+     <!--start footer-->
+     <footer class="page-footer">
+      <p class="mb-0">Copyright © 2024. All right reserved.</p>
+    </footer>
+    <!--top footer-->
+
+  <!--start cart-->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart">
+    <div class="offcanvas-header border-bottom h-70 justify-content-between">
+      <h5 class="mb-0" id="offcanvasRightLabel">8 New Orders</h5>
+      <a href="javascript:;" class="primaery-menu-close" data-bs-dismiss="offcanvas">
+        <i class="material-icons-outlined">close</i>
+      </a>
+    </div>
+    <div class="offcanvas-body p-0">
+      <div class="order-list">
+        <div class="order-item d-flex align-items-center gap-3 p-3 border-bottom">
+          <div class="order-img">
+            <img th:src="@{/assets/images/orders/01.png}" class="img-fluid rounded-3" width="75" alt="">
+          </div>
+          <div class="order-info flex-grow-1">
+            <h5 class="mb-1 order-title">White Men Shoes</h5>
+            <p class="mb-0 order-price">$289</p>
+          </div>
+          <div class="d-flex">
+            <a class="order-delete"><span class="material-icons-outlined">delete</span></a>
+            <a class="order-delete"><span class="material-icons-outlined">visibility</span></a>
+          </div>
+        </div>
+
+        <div class="order-item d-flex align-items-center gap-3 p-3 border-bottom">
+          <div class="order-img">
+            <img th:src="@{/assets/images/orders/02.png}" class="img-fluid rounded-3" width="75" alt="">
+          </div>
+          <div class="order-info flex-grow-1">
+            <h5 class="mb-1 order-title">Red Airpods</h5>
+            <p class="mb-0 order-price">$149</p>
+          </div>
+          <div class="d-flex">
+            <a class="order-delete"><span class="material-icons-outlined">delete</span></a>
+            <a class="order-delete"><span class="material-icons-outlined">visibility</span></a>
+          </div>
+        </div>
+
+        <div class="order-item d-flex align-items-center gap-3 p-3 border-bottom">
+          <div class="order-img">
+            <img th:src="@{/assets/images/orders/03.png}" class="img-fluid rounded-3" width="75" alt="">
+          </div>
+          <div class="order-info flex-grow-1">
+            <h5 class="mb-1 order-title">Men Polo Tshirt</h5>
+            <p class="mb-0 order-price">$139</p>
+          </div>
+          <div class="d-flex">
+            <a class="order-delete"><span class="material-icons-outlined">delete</span></a>
+            <a class="order-delete"><span class="material-icons-outlined">visibility</span></a>
+          </div>
+        </div>
+
+        <div class="order-item d-flex align-items-center gap-3 p-3 border-bottom">
+          <div class="order-img">
+            <img th:src="@{/assets/images/orders/04.png}" class="img-fluid rounded-3" width="75" alt="">
+          </div>
+          <div class="order-info flex-grow-1">
+            <h5 class="mb-1 order-title">Blue Jeans Casual</h5>
+            <p class="mb-0 order-price">$485</p>
+          </div>
+          <div class="d-flex">
+            <a class="order-delete"><span class="material-icons-outlined">delete</span></a>
+            <a class="order-delete"><span class="material-icons-outlined">visibility</span></a>
+          </div>
+        </div>
+
+        <div class="order-item d-flex align-items-center gap-3 p-3 border-bottom">
+          <div class="order-img">
+            <img th:src="@{/assets/images/orders/05.png}" class="img-fluid rounded-3" width="75" alt="">
+          </div>
+          <div class="order-info flex-grow-1">
+            <h5 class="mb-1 order-title">Fancy Shirts</h5>
+            <p class="mb-0 order-price">$758</p>
+          </div>
+          <div class="d-flex">
+            <a class="order-delete"><span class="material-icons-outlined">delete</span></a>
+            <a class="order-delete"><span class="material-icons-outlined">visibility</span></a>
+          </div>
+        </div>
+
+        <div class="order-item d-flex align-items-center gap-3 p-3 border-bottom">
+          <div class="order-img">
+            <img th:src="@{/assets/images/orders/06.png}" class="img-fluid rounded-3" width="75" alt="">
+          </div>
+          <div class="order-info flex-grow-1">
+            <h5 class="mb-1 order-title">Home Sofa Set </h5>
+            <p class="mb-0 order-price">$546</p>
+          </div>
+          <div class="d-flex">
+            <a class="order-delete"><span class="material-icons-outlined">delete</span></a>
+            <a class="order-delete"><span class="material-icons-outlined">visibility</span></a>
+          </div>
+        </div>
+
+        <div class="order-item d-flex align-items-center gap-3 p-3 border-bottom">
+          <div class="order-img">
+            <img th:src="@{/assets/images/orders/07.png}" class="img-fluid rounded-3" width="75" alt="">
+          </div>
+          <div class="order-info flex-grow-1">
+            <h5 class="mb-1 order-title">Black iPhone</h5>
+            <p class="mb-0 order-price">$1049</p>
+          </div>
+          <div class="d-flex">
+            <a class="order-delete"><span class="material-icons-outlined">delete</span></a>
+            <a class="order-delete"><span class="material-icons-outlined">visibility</span></a>
+          </div>
+        </div>
+
+        <div class="order-item d-flex align-items-center gap-3 p-3 border-bottom">
+          <div class="order-img">
+            <img th:src="@{/assets/images/orders/08.png}" class="img-fluid rounded-3" width="75" alt="">
+          </div>
+          <div class="order-info flex-grow-1">
+            <h5 class="mb-1 order-title">Goldan Watch</h5>
+            <p class="mb-0 order-price">$689</p>
+          </div>
+          <div class="d-flex">
+            <a class="order-delete"><span class="material-icons-outlined">delete</span></a>
+            <a class="order-delete"><span class="material-icons-outlined">visibility</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="offcanvas-footer h-70 p-3 border-top">
+      <div class="d-grid">
+        <button type="button" class="btn btn-dark" data-bs-dismiss="offcanvas">View Products</button>
+      </div>
+    </div>
+  </div>
+  <!--end cart-->
+
+
+  <!--start switcher-->
+  <button class="btn btn-primary position-fixed bottom-0 end-0 m-3 d-flex align-items-center gap-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop">
+    <i class="material-icons-outlined">tune</i>Customize
+  </button>
+  
+  <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="staticBackdrop">
+    <div class="offcanvas-header border-bottom h-70 justify-content-between">
+      <div class="">
+        <h5 class="mb-0">Theme Customizer</h5>
+        <p class="mb-0">Customize your theme</p>
+      </div>
+      <a href="javascript:;" class="primaery-menu-close" data-bs-dismiss="offcanvas">
+        <i class="material-icons-outlined">close</i>
+      </a>
+    </div>
+    <div class="offcanvas-body">
+      <div>
+        <p>Theme variation</p>
+
+        <div class="row g-3">
+          <div class="col-12 col-xl-6">
+            <input type="radio" class="btn-check" name="theme-options" id="LightTheme" checked>
+            <label class="btn btn-outline-secondary d-flex flex-column gap-1 align-items-center justify-content-center p-4" for="LightTheme">
+              <span class="material-icons-outlined">light_mode</span>
+              <span>Light</span>
+            </label>
+          </div>
+          <div class="col-12 col-xl-6">
+            <input type="radio" class="btn-check" name="theme-options" id="DarkTheme">
+            <label class="btn btn-outline-secondary d-flex flex-column gap-1 align-items-center justify-content-center p-4" for="DarkTheme">
+              <span class="material-icons-outlined">dark_mode</span>
+              <span>Dark</span>
+            </label>
+          </div>
+          <div class="col-12 col-xl-6">
+            <input type="radio" class="btn-check" name="theme-options" id="SemiDarkTheme">
+            <label class="btn btn-outline-secondary d-flex flex-column gap-1 align-items-center justify-content-center p-4" for="SemiDarkTheme">
+              <span class="material-icons-outlined">contrast</span>
+              <span>Semi Dark</span>
+            </label>
+          </div>
+          <div class="col-12 col-xl-6">
+            <input type="radio" class="btn-check" name="theme-options" id="BoderedTheme">
+            <label class="btn btn-outline-secondary d-flex flex-column gap-1 align-items-center justify-content-center p-4" for="BoderedTheme">
+              <span class="material-icons-outlined">border_style</span>
+              <span>Bordered</span>
+            </label>
+          </div>
+        </div><!--end row-->
+
+      </div>
+    </div>
+  </div>
+  <!--start switcher-->
+
+  <!--Scripts-->
+  <div th:replace="fragments/scripts :: commonScripts"></div>
+
+<script>
+  function mostrarAlerta(tipo, titulo, mensagem, duracao = 5000, tempoBarra = 3000) {
+    const container = document.getElementById('alert-container');
+
+    const alerta = document.createElement('div');
+    alerta.className = `alert alert-${tipo} border-0 bg-${tipo} alert-dismissible fade show position-relative mb-2`;
+    alerta.style.paddingBottom = '1.5rem';
+
+    const corBarra = tipo === 'success' ? '#b2f2bb' : '#f5c2c7';
+
+    alerta.innerHTML = `
+      <div class="d-flex align-items-center">
+        <div class="font-35 text-white">
+          <span class="material-icons-outlined fs-2">
+            ${tipo === 'success' ? 'check_circle' : 'error'}
+          </span>
+        </div>
+        <div class="ms-3 flex-grow-1">
+          <h6 class="mb-0 text-white">${titulo}</h6>
+          <div class="text-white">${mensagem}</div>
+        </div>
+      </div>
+      <button type="button" class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="alert" aria-label="Close"></button>
+      <div class="position-absolute bottom-0 start-0 w-100">
+        <div class="progress" style="height: 5px;">
+          <div class="progress-bar" role="progressbar" style="width: 0%; background-color: ${corBarra};" id="barra-temporizador"></div>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(alerta);
+
+    // Anima a barra de progresso com tempo reduzido
+    const barra = alerta.querySelector('#barra-temporizador');
+    barra.style.transition = `width ${tempoBarra}ms linear`;
+    setTimeout(() => {
+      barra.style.width = '100%';
+    }, 50);
+
+    // Remove alerta após o tempo total
+    setTimeout(() => {
+      alerta.classList.remove('show');
+      alerta.classList.add('hide');
+      setTimeout(() => alerta.remove(), 500);
+    }, duracao);
+  }
+</script>
+
+<script>
+  let dadosOriginais = {};
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('form-chamado');
+    if (!form) return;
+
+    const formData = new FormData(form);
+
+    dadosOriginais = {
+      titulo: formData.get('titulo') || '',
+      status: formData.get('status') || '',
+      prioridade: formData.get('prioridade') || '',
+      tecnicoId: formData.get('tecnicoId') || '',
+      clienteId: formData.get('clienteId') || '',
+      observacoes: formData.get('observacoes') || ''
+    };
+  });
+
+  document.getElementById('form-chamado').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Sessão expirada. Faça login novamente.');
+      window.location.href = '/chamados/login';
+      return;
+    }
+
+    const id = document.getElementById('chamado-id')?.value || null;
+    const formData = new FormData(this);
+
+    const dadosAtuais = {
+      titulo: formData.get('titulo'),
+      status: formData.get('status'),
+      prioridade: formData.get('prioridade'),
+      tecnicoId: formData.get('tecnicoId'),
+      clienteId: formData.get('clienteId'),
+      observacoes: formData.get('observacoes')
+    };
+
+    const houveAlteracao = Object.keys(dadosOriginais).some(key => {
+      return dadosOriginais[key] !== dadosAtuais[key];
+    });
+
+    if (!houveAlteracao && id) {
+      alert('Nenhuma alteração detectada.');
+      return;
+    }
+
+   const chamado = {
+    id: id,
+    titulo: dadosAtuais.titulo,
+    status: Number(dadosAtuais.status),
+    prioridade: Number(dadosAtuais.prioridade),
+    tecnico: Number(dadosAtuais.tecnicoId),  // nome correto
+    cliente: Number(dadosAtuais.clienteId),  // nome correto
+    observacoes: dadosAtuais.observacoes
+  };
+
+
+    const metodo = id ? 'PUT' : 'POST';
+    const url = id ? `/chamados/${id}` : '/chamados';
+
+    fetch(url, {
+      method: metodo,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify(chamado)
+    })
+    .then(response => {
+      if (response.ok) {
+        mostrarAlerta('success', 'Atualização realizada', 'Chamado atualizado com sucesso!', 5000);
+        setTimeout(() => {
+          window.location.href = '/chamados/helpdesk';
+        }, 3000);
+      } else {
+        mostrarAlerta('danger', 'Erro', 'Não foi possível atualizar o chamado.', 5000);
+      }
+    })
+    .catch(error => {
+      console.error('Erro ao atualizar chamado:', error);
+      mostrarAlerta('danger', 'Erro', error.message || 'Erro inesperado ao atualizar o chamado.', 5000);
+    });
+  });
+</script>
+
+
+
+</body>
+</html>

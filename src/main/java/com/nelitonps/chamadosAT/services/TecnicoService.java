@@ -45,6 +45,12 @@ public class TecnicoService {
         objDTO.setId(id);
         Tecnico oldObj = findById(id);
         validaPorCpfEEmail(objDTO);
+        // Se a senha vier vazia, mantém a antiga
+        if (objDTO.getSenha() == null || objDTO.getSenha().isEmpty()) {
+            objDTO.setSenha(oldObj.getSenha()); // já está criptografada
+        } else {
+            objDTO.setSenha(encoder.encode(objDTO.getSenha())); // nova senha criptografada
+        }
         oldObj = new Tecnico(objDTO);
         return tecnicoRepository.save(oldObj);
     }

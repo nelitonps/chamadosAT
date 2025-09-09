@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="commonHead(title)">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title}">Metoxi | Dashboard</title>
+
+    <link rel="icon" th:href="@{/assets/images/favicon-32x32.png}" type="image/png">
+
+    <!--plugins-->
+    <link th:href="@{/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/plugins/metismenu/metisMenu.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/plugins/metismenu/mm-vertical.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/plugins/simplebar/css/simplebar.css}">
+
+    <!--bootstrap css-->
+    <link th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons+Outlined" rel="stylesheet">
+
+    <!--main css-->
+    <link th:href="@{/assets/css/bootstrap-extended.css}" rel="stylesheet">
+    <link th:href="@{/assets/css/main.css}" rel="stylesheet">
+    <link th:href="@{/assets/css/dark-theme.css}" rel="stylesheet">
+    <link th:href="@{/assets/css/semi-dark.css}" rel="stylesheet">
+    <link th:href="@{/assets/css/bordered-theme.css}" rel="stylesheet">
+    <link th:href="@{/assets/css/responsive.css}" rel="stylesheet">
+</head>
+</html>
