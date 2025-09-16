@@ -49,6 +49,11 @@ public class ChamadoController {
         return "relatorios";
     }
 
+    @GetMapping("/perfil")
+    public String perfil() {
+        return "perfil";
+    }
+
     @GetMapping(value = "/{id}")
     public ResponseEntity<ChamadoDTO> finById(@PathVariable Integer id){
         Chamado obj = chamadoService.findById(id);
